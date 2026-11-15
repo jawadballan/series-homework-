@@ -27,7 +27,7 @@ export function hasTopEpisode(show, minRating) {
 }
 
 //b4
-export function getCreatorsFrom(series, country) {
+export function getCreatorsFrom(series, country) {  // Return an array of creator names from the given country, or an empty array if there are no creators from that country
   return series
     .filter((show) => show.creator.country === country)
     .map((show) => show.creator.name);
@@ -37,3 +37,48 @@ export function getCreatorsFrom(series, country) {
 export function sortByStartYear(series) {
   return [...series].sort((a, b) => a.startYear - b.startYear);
 }
+
+
+//c1
+export function renameSeries(series, id, newTitle) { // Return a new array of shows with the title of the show with the given id updated to the new title, or the original array if no show with the given id exists
+  return series.map((show) =>
+    show.id === id
+      ? { ...show, title: newTitle }
+      : show
+  );
+}
+
+//c2
+export function addSeason(series, showId, season) {
+  return series.map((show) =>  // Map over the series array to create a new array with updated shows
+    show.id === showId    // If the show id matches the given showId, return a new show object with the updated seasons array
+      ? {
+          ...show,
+          seasons: [...show.seasons, season],
+        }
+      : show
+  );
+}
+
+//c3 
+export function addEpisode(series, showId, seasonNumber, episode) {
+  return series.map((show) => {
+    if (show.id !== showId) { // If the show id does not match, return the show as is
+      return show;
+    }
+
+    return { // If the show id matches, return a new show object with the updated seasons array
+      ...show,
+      seasons: show.seasons.map((season) =>
+        season.number === seasonNumber
+          ? {
+              ...season,
+              episodes: [...season.episodes, episode],
+            }
+          : season
+      ),
+    };
+  });
+}
+
+//c4
